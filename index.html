@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <style>
+        body {
+            padding-top: 200px;
+            text-align: center;
+        }
+
+        .container {
+            width: 150px;
+            height: 50px;
+            margin: 0 auto;
+            line-height: 50px;
+            text-align: center;
+            background-color: yellow;
+        }
+
+        .inner {
+            display: inline-block;
+            width: 100px;
+            height: 24px;
+            line-height: 24px;
+            margin: 0 auto;
+            background-color: bisque;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container" class="container">
+        <div id="inner" class="inner">test</div>
+    </div>
+
+</body>
+<script>
+    const maxVerticalOffset = 20;
+    const maxStandardOffset = 20;
+    const containerEl = document.getElementById('container');
+    const innerEl = document.getElementById('inner');
+
+    const containerElWidth = containerEl.offsetWidth;
+    const containerElHeight = containerEl.offsetHeight;
+    const containerElOffsetLeft = containerEl.offsetLeft;
+    const containerElOffsetTop = containerEl.offsetTop;
+
+    const innerElWidth = innerEl.offsetWidth;
+    const innerElHeight = innerEl.offsetHeight;
+
+    containerEl.addEventListener('mousemove', event => {
+        const { clientX, clientY } = event;
+        const offsetX = clientX - containerElOffsetLeft;
+        const offsetY = clientY - containerElOffsetTop;
+
+        let transformX = (containerElWidth - innerElWidth) / 2 * (offsetX * 2 / containerElWidth - 1);
+        let transformY = (containerElHeight - innerElHeight) / 2 * (offsetY * 2 / containerElHeight - 1);
+
+        innerEl.style.transform = `matrix3d(
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            ${transformX},${transformY},0,1
+            )`
+    }, true);
+    containerEl.addEventListener('mouseleave', event => {
+        setTimeout(() => {
+            innerEl.style.transform = `matrix3d(
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            0,0,0,1
+            )`
+        }, 200);
+    });
+</script>
+
+</html>
